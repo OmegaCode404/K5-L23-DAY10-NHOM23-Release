@@ -300,7 +300,14 @@ def build_candidates_if_possible(delivery: Path, out_path: Path) -> bool:
     except ImportError:
         print("chưa có validator/crosscheck.py — bỏ qua --candidates", file=sys.stderr)
         return False
-    payload = crosscheck.build_candidates(delivery)
+    builder = getattr(crosscheck, "build_candidates", None)
+    if builder is None:
+        # M3 crosscheck.py hiện cung cấp API generate_candidates.
+        builder = getattr(crosscheck, "generate_candidates", None)
+    if builder is None:
+        print("validator/crosscheck.py thiếu build_candidates() hoặc generate_candidates()", file=sys.stderr)
+        return False
+    payload = builder(delivery)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     return True
