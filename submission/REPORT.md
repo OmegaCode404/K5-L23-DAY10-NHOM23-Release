@@ -7,9 +7,9 @@
 - Số lỗi luật trên `r23007`: 10 (`missing_image=2`, `wrong_hash=2`, `bbox_out_of_bounds=2`, `duplicate_box=1`, `scene_leak=1`, `guideline_mismatch=1`, `thing_overlap=1`).
 - Candidates `r23007`: 112 trên 99 ảnh, 105 nhóm review; `class_swap=7`, `category_swap=7`, `bbox_drift=3`, `missing_box=1`, `instance_merge=94`. `class_swap` và `category_swap` là hai giả thuyết thay thế cho 7 bất đồng lớp.
 - Lô sạch (`--no-faults`, seed 5): 0 lỗi luật; 25 candidates `instance_merge` trên 25 ảnh, cần xem ảnh để đo nhiễu tự nhiên.
-- Review ảnh đã chạy cho toàn bộ 105 nhóm: `confirmed` 4 dòng (3 cặp lỗi), `rejected` phần lớn, còn 8 dòng `unresolved` (5 nhóm class_disagreement và ảnh `000000004134` thiếu file).
+- `review_log.csv`: 111 dòng dữ liệu; 3 `confirmed`, 95 `rejected`, 13 `unresolved`. Có 105 nhóm candidate; 6 nhóm class disagreement có 12 dòng unresolved, và ảnh `000000004134` thiếu file.
 - Vì sao F1 lỗi gán nhãn chỉ ≈ `0.2`: 94/112 ứng viên là `instance_merge`, và hầu hết bị `rejected` khi mở ảnh. Recall thấp là do cách sinh ứng viên quá thô (box chồng nhau cùng lớp), không phải do bỏ sót lỗi luật. Điều này đúng nghĩa vụ "ứng viên khác lỗi".
-- `instance_merge` chưa được kiểm chứng đầy đủ bằng mask: chỉ vet được bằng ảnh, và mask panoptic là bản đồ màu đơn sắc không có chú giải; các dòng `rejected` cho `instance_merge` là phán đoán thận trọng, cần kiểm lại bằng mask khi có thời gian.
+- `instance_merge` chưa được kiểm chứng đầy đủ bằng mask: ảnh đơn lẻ không đủ xác nhận segment ownership. Các `rejected` hiện là sàng lọc sơ bộ, chưa phải kết luận chắc chắn; cần đối chiếu segment IDs và mask theo từng candidate trước khi chốt.
 - Đã đo candidates với cấu hình mặc định của `crosscheck.py`; ngưỡng `merge_max_box_iou=0.5`, `min_segment_pixels=64`, `min_segment_fraction=0.0005`. Chưa hiệu chỉnh lại sau review. Không đọc `_private`.
 
 ## 2. Vì sao báo hết ứng viên làm F1 giảm?

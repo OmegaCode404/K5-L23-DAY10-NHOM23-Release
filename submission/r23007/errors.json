@@ -1,6 +1,10 @@
 {
  "errors": [
   {
+   "type": "bbox_drift",
+   "target": "000000012667"
+  },
+  {
    "type": "bbox_out_of_bounds",
    "target": "000000000285"
   },
@@ -9,12 +13,20 @@
    "target": "000000015597"
   },
   {
+   "type": "class_swap",
+   "target": "000000006723"
+  },
+  {
    "type": "duplicate_box",
    "target": "000000002153"
   },
   {
    "type": "guideline_mismatch",
    "target": "000000013201"
+  },
+  {
+   "type": "instance_merge",
+   "target": "000000000632"
   },
   {
    "type": "missing_image",
